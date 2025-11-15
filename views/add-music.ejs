@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Music - Music App</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Add New Music</h1>
+        <nav>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/music">Music List</a>
+            <form method="POST" action="/logout" class="logout-form">
+                <button type="submit">Logout</button>
+            </form>
+        </nav>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <h2>Add a New Music Piece</h2>
+            <form method="POST" action="/music">
+                <div class="form-group">
+                    <label for="title">Title:</label>
+                    <input type="text" id="title" name="title" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="artist">Artist:</label>
+                    <input type="text" id="artist" name="artist" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="chords">Chords (comma separated):</label>
+                    <input type="text" id="chords" name="chords" placeholder="C, G, Am, F, Dm" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="notes">Music Notes:</label>
+                    <textarea id="notes" name="notes" placeholder="Enter music notation or description..." required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="difficulty">Difficulty Level:</label>
+                    <select id="difficulty" name="difficulty" required>
+                        <option value="">Select Difficulty</option>
+                        <option value="Beginner">Beginner</option>
+                        <option value="Intermediate">Intermediate</option>
+                        <option value="Advanced">Advanced</option>
+                        <option value="Expert">Expert</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="style">Music Style:</label>
+                    <select id="style" name="style" required>
+                        <option value="">Select Style</option>
+                        <option value="Classical">Classical</option>
+                        <option value="Jazz">Jazz</option>
+                        <option value="Rock">Rock</option>
+                        <option value="Pop">Pop</option>
+                        <option value="Blues">Blues</option>
+                        <option value="Electronic">Electronic</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="bpm">BPM (Beats Per Minute):</label>
+                    <input type="number" id="bpm" name="bpm" min="40" max="240" value="120" required>
+                </div>
+                
+                <button type="submit" class="submit-btn">Add Music</button>
+                <a href="/music" class="btn cancel">Cancel</a>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

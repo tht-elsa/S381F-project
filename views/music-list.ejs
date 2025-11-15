@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Music List - Music App</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Music Collection</h1>
+        <nav>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/music/add">Add New Music</a>
+            <form method="POST" action="/logout" class="logout-form">
+                <button type="submit">Logout</button>
+            </form>
+        </nav>
+    </header>
+
+    <main>
+        <table class="music-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Artist</th>
+                    <th>Style</th>
+                    <th>Difficulty</th>
+                    <th>BPM</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% music.forEach(item => { %>
+                <tr>
+                    <td><%= item.title %></td>
+                    <td><%= item.artist %></td>
+                    <td><%= item.style %></td>
+                    <td><%= item.difficulty %></td>
+                    <td><%= item.bpm %></td>
+                    <td class="actions">
+                        <a href="/music/edit/<%= item._id %>" class="btn edit">Edit</a>
+                        <form method="POST" action="/music/delete/<%= item._id %>" class="delete-form">
+                            <button type="submit" class="btn delete">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>

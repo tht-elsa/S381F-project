@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voting System - Music App</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Music Preferences Voting</h1>
+        <nav>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/music">Music List</a>
+            <form method="POST" action="/logout" class="logout-form">
+                <button type="submit">Logout</button>
+            </form>
+        </nav>
+    </header>
+
+    <main>
+        <div class="vote-form">
+            <h2>Cast Your Vote</h2>
+            <p>Share your music preferences with us!</p>
+            
+            <form method="POST" action="/vote">
+                <div class="form-group">
+                    <label for="favoriteInstrument">Favorite Instrument:</label>
+                    <select id="favoriteInstrument" name="favoriteInstrument" required>
+                        <option value="">Select Instrument</option>
+                        <option value="Piano">Piano</option>
+                        <option value="Guitar">Guitar</option>
+                        <option value="Violin">Violin</option>
+                        <option value="Drums">Drums</option>
+                        <option value="Bass">Bass</option>
+                        <option value="Saxophone">Saxophone</option>
+                        <option value="Vocals">Vocals</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="favoriteStyle">Favorite Music Style:</label>
+                    <select id="favoriteStyle" name="favoriteStyle" required>
+                        <option value="">Select Style</option>
+                        <option value="Classical">Classical</option>
+                        <option value="Jazz">Jazz</option>
+                        <option value="Rock">Rock</option>
+                        <option value="Pop">Pop</option>
+                        <option value="Blues">Blues</option>
+                        <option value="Electronic">Electronic</option>
+                        <option value="Hip-Hop">Hip-Hop</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="difficultyPreference">Preferred Difficulty Level:</label>
+                    <select id="difficultyPreference" name="difficultyPreference" required>
+                        <option value="">Select Difficulty</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="submit-btn">Submit Vote</button>
+            </form>
+        </div>
+
+        <div class="vote-results">
+            <h2>Voting Results</h2>
+            <% if (votes.length === 0) { %>
+                <p>No votes yet. Be the first to vote!</p>
+            <% } else { %>
+                <% votes.forEach(vote => { %>
+                    <div class="vote-item">
+                        <h3>Vote from User: <%= vote.userId %></h3>
+                        <p><strong>Favorite Instrument:</strong> <%= vote.favoriteInstrument %></p>
+                        <p><strong>Favorite Style:</strong> <%= vote.favoriteStyle %></p>
+                        <p><strong>Preferred Difficulty:</strong> <%= vote.difficultyPreference %></p>
+                        <p><strong>Voted at:</strong> <%= new Date(vote.votedAt).toLocaleString() %></p>
+                    </div>
+                <% }); %>
+            <% } %>
+        </div>
+    </main>
+</body>
+</html>

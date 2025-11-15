@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Music - Music App</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Edit Music: <%= music.title %></h1>
+        <nav>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/music">Music List</a>
+            <form method="POST" action="/logout" class="logout-form">
+                <button type="submit">Logout</button>
+            </form>
+        </nav>
+    </header>
+
+    <main>
+        <div class="form-container">
+            <form method="POST" action="/music/update/<%= music._id %>">
+                <div class="form-group">
+                    <label>Title:</label>
+                    <input type="text" name="title" value="<%= music.title %>" required>
+                </div>
+                <div class="form-group">
+                    <label>Artist:</label>
+                    <input type="text" name="artist" value="<%= music.artist %>" required>
+                </div>
+                <div class="form-group">
+                    <label>Chords (comma separated):</label>
+                    <input type="text" name="chords" value="<%= music.chords.join(', ') %>" required>
+                </div>
+                <div class="form-group">
+                    <label>Music Notes:</label>
+                    <textarea name="notes" required><%= music.notes %></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Difficulty:</label>
+                    <select name="difficulty" required>
+                        <option value="Beginner" <%= music.difficulty === 'Beginner' ? 'selected' : '' %>>Beginner</option>
+                        <option value="Intermediate" <%= music.difficulty === 'Intermediate' ? 'selected' : '' %>>Intermediate</option>
+                        <option value="Advanced" <%= music.difficulty === 'Advanced' ? 'selected' : '' %>>Advanced</option>
+                        <option value="Expert" <%= music.difficulty === 'Expert' ? 'selected' : '' %>>Expert</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Style:</label>
+                    <select name="style" required>
+                        <option value="Classical" <%= music.style === 'Classical' ? 'selected' : '' %>>Classical</option>
+                        <option value="Jazz" <%= music.style === 'Jazz' ? 'selected' : '' %>>Jazz</option>
+                        <option value="Rock" <%= music.style === 'Rock' ? 'selected' : '' %>>Rock</option>
+                        <option value="Pop" <%= music.style === 'Pop' ? 'selected' : '' %>>Pop</option>
+                        <option value="Blues" <%= music.style === 'Blues' ? 'selected' : '' %>>Blues</option>
+                        <option value="Electronic" <%= music.style === 'Electronic' ? 'selected' : '' %>>Electronic</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>BPM:</label>
+                    <input type="number" name="bpm" value="<%= music.bpm %>" min="40" max="240" required>
+                </div>
+                <button type="submit" class="submit-btn">Update Music</button>
+                <a href="/music" class="btn cancel">Cancel</a>
+            </form>
+        </div>
+    </main>
+</body>
+</html>

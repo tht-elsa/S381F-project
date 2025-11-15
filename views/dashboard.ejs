@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Music CRUD App</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>🎵 Music Dashboard</h1>
+            <div class="user-info">
+                <span>Welcome, <strong><%= username %></strong></span>
+                <form method="POST" action="/logout" class="logout-form">
+                    <button type="submit" class="btn btn-outline">Logout</button>
+                </form>
+            </div>
+        </div>
+    </header>
+
+    <nav class="main-nav">
+        <div class="nav-container">
+            <a href="/music" class="nav-link">🎼 Manage Music</a>
+            <a href="/vote" class="nav-link">🗳️ Voting System</a>
+            <a href="/dashboard" class="nav-link active">📊 Dashboard</a>
+        </div>
+    </nav>
+
+    <main class="dashboard-main">
+        <div class="container">
+            <div class="welcome-section">
+                <h2>Welcome to Your Music Hub</h2>
+                <p>Manage your music collection, explore different styles, and share your preferences with our community.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">🎵</div>
+                    <div class="stat-content">
+                        <h3>Music Pieces</h3>
+                        <div class="stat-number"><%= musicCount %></div>
+                        <p>Total songs in collection</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">🗳️</div>
+                    <div class="stat-content">
+                        <h3>Total Votes</h3>
+                        <div class="stat-number"><%= voteCount %></div>
+                        <p>Community preferences</p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon">👤</div>
+                    <div class="stat-content">
+                        <h3>Your Profile</h3>
+                        <div class="stat-text"><%= username %></div>
+                        <p>Active user</p>
+                    </div>
+                </div>
+            </div>
+
+            <% if (userVote) { %>
+            <div class="user-vote-section">
+                <h3>Your Music Preferences</h3>
+                <div class="vote-details">
+                    <p><strong>Favorite Instrument:</strong> <%= userVote.favoriteInstrument %></p>
+                    <p><strong>Favorite Style:</strong> <%= userVote.favoriteStyle %></p>
+                    <p><strong>Difficulty Preference:</strong> <%= userVote.difficultyPreference %></p>
+                    <a href="/vote" class="btn btn-primary">Update Vote</a>
+                </div>
+            </div>
+            <% } else { %>
+            <div class="cta-section">
+                <h3>Share Your Preferences</h3>
+                <p>Help us understand the community's music tastes by casting your vote.</p>
+                <a href="/vote" class="btn btn-primary">Cast Your Vote Now</a>
+            </div>
+            <% } %>
+
+            <div class="quick-actions">
+                <h3>Quick Actions</h3>
+                <div class="action-buttons">
+                    <a href="/music/add" class="btn btn-success">
+                        ➕ Add New Music
+                    </a>
+                    <a href="/music" class="btn btn-info">
+                        📋 View All Music
+                    </a>
+                    <a href="/vote" class="btn btn-warning">
+                        🗳️ Voting System
+                    </a>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>
