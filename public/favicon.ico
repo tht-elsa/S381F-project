@@ -1,0 +1,4 @@
+// Add this route before your other routes to handle favicon
+app.get('/favicon.ico', (req, res) => {
+    res.status(204).end(); // No content response for favicon
+});
