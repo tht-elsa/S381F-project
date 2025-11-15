@@ -7,11 +7,11 @@ const PORT = process.env.PORT || 3000;
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // Session configuration
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'music-app-secret-key',
+  secret: process.env.SESSION_SECRET || 'music-app-secret-key-change-in-production',
   resave: false,
   saveUninitialized: false,
   cookie: {
@@ -20,9 +20,9 @@ app.use(session({
   }
 }));
 
-// Set EJS as template engine
+// Set EJS as template engine with correct path
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, '../views'));
 
 // Demo accounts data
 const demoAccounts = [
@@ -32,9 +32,9 @@ const demoAccounts = [
 
 // Sample music data
 let musicData = [
-  { id: 1, title: 'Song One', artist: 'Artist A', votes: 0 },
-  { id: 2, title: 'Song Two', artist: 'Artist B', votes: 0 },
-  { id: 3, title: 'Song Three', artist: 'Artist C', votes: 0 }
+  { id: 1, title: 'Song One', artist: 'Artist A', votes: 5 },
+  { id: 2, title: 'Song Two', artist: 'Artist B', votes: 3 },
+  { id: 3, title: 'Song Three', artist: 'Artist C', votes: 7 }
 ];
 
 // Authentication middleware
@@ -48,7 +48,7 @@ const requireAuth = (req, res, next) => {
 
 // Routes
 
-// Health check endpoint
+// Health check endpoint (API route)
 app.get('/api/health', (req, res) => {
   res.json({
     status: 'OK',
@@ -71,33 +71,46 @@ app.get('/login', (req, res) => {
 
 // Login handler
 app.post('/login', (req, res) => {
-  const { username, password } = req.body;
+  try {
+    const { username, password } = req.body;
 
-  // Find user in demo accounts
-  const user = demoAccounts.find(acc => acc.username === username);
-  
-  if (!user) {
-    return res.render('login', { 
-      error: 'Invalid username or password',
+    console.log('Login attempt:', { username, password: '***' });
+
+    // Find user in demo accounts
+    const user = demoAccounts.find(acc => acc.username === username);
+    
+    if (!user) {
+      console.log('User not found:', username);
+      return res.render('login', { 
+        error: 'Invalid username or password',
+        demoAccounts: demoAccounts.map(acc => ({ username: acc.username }))
+      });
+    }
+
+    // For demo purposes, simple password check
+    if (user.password !== password) {
+      console.log('Invalid password for user:', username);
+      return res.render('login', { 
+        error: 'Invalid username or password',
+        demoAccounts: demoAccounts.map(acc => ({ username: acc.username }))
+      });
+    }
+
+    // Set session
+    req.session.user = {
+      id: user.id,
+      username: user.username
+    };
+
+    console.log('Login successful for user:', username);
+    res.redirect('/dashboard');
+  } catch (error) {
+    console.error('Login error:', error);
+    res.render('login', { 
+      error: 'Server error. Please try again.',
       demoAccounts: demoAccounts.map(acc => ({ username: acc.username }))
     });
   }
-
-  // For demo purposes, simple password check
-  if (user.password !== password) {
-    return res.render('login', { 
-      error: 'Invalid username or password',
-      demoAccounts: demoAccounts.map(acc => ({ username: acc.username }))
-    });
-  }
-
-  // Set session
-  req.session.user = {
-    id: user.id,
-    username: user.username
-  };
-
-  res.redirect('/dashboard');
 });
 
 // Logout handler
@@ -128,7 +141,10 @@ app.get('/music-list', requireAuth, (req, res) => {
 
 // Add music page
 app.get('/add-music', requireAuth, (req, res) => {
-  res.render('add-music', { user: req.session.user });
+  res.render('add-music', { 
+    user: req.session.user,
+    error: null 
+  });
 });
 
 // Add music handler
@@ -143,7 +159,7 @@ app.post('/add-music', requireAuth, (req, res) => {
   }
 
   const newMusic = {
-    id: musicData.length + 1,
+    id: musicData.length > 0 ? Math.max(...musicData.map(m => m.id)) + 1 : 1,
     title,
     artist,
     votes: 0
@@ -199,7 +215,7 @@ app.post('/delete-music/:id', requireAuth, (req, res) => {
 app.get('/vote', requireAuth, (req, res) => {
   res.render('vote', { 
     user: req.session.user,
-    music: musicData
+    music: musicData.sort((a, b) => b.votes - a.votes)
   });
 });
 
@@ -212,6 +228,14 @@ app.post('/vote/:id', requireAuth, (req, res) => {
     musicItem.votes += 1;
   }
 
+  res.redirect('/vote');
+});
+
+// Reset votes handler
+app.post('/reset-votes', requireAuth, (req, res) => {
+  musicData.forEach(song => {
+    song.votes = 0;
+  });
   res.redirect('/vote');
 });
 
@@ -229,10 +253,5 @@ app.get('/', (req, res) => {
   }
 });
 
-// Start server
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-  console.log(`Visit: http://localhost:${PORT}`);
-});
-
+// Export the app for Vercel
 module.exports = app;
