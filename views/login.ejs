@@ -24,7 +24,7 @@
                         id="username" 
                         name="username" 
                         required 
-                        value="<%= typeof username !== 'undefined' ? username : '' %>"
+                        autocomplete="username"
                     >
                 </div>
                 
@@ -35,6 +35,7 @@
                         id="password" 
                         name="password" 
                         required
+                        autocomplete="current-password"
                     >
                 </div>
                 
@@ -46,29 +47,45 @@
             <div class="demo-accounts">
                 <h3>Demo Accounts:</h3>
                 <% demoAccounts.forEach(function(account) { %>
-                    <button 
-                        class="demo-btn" 
-                        onclick="fillDemoAccount('<%= account.username %>', 'password123')"
-                    >
-                        Auto Login (<%= account.username %>)
-                    </button>
+                    <form action="/login" method="POST" style="margin-bottom: 10px;">
+                        <input type="hidden" name="username" value="<%= account.username %>">
+                        <input type="hidden" name="password" value="password123">
+                        <button type="submit" class="demo-btn">
+                            Auto Login (<%= account.username %>)
+                        </button>
+                    </form>
                 <% }); %>
+            </div>
+
+            <div style="margin-top: 20px; text-align: center;">
+                <a href="/api/health" target="_blank" style="color: #667eea; text-decoration: none;">
+                    Health Check
+                </a>
             </div>
         </div>
     </div>
 
     <script>
-        function fillDemoAccount(username, password) {
-            document.getElementById('username').value = username;
-            document.getElementById('password').value = password;
-            document.getElementById('loginForm').submit();
-        }
-
         // Handle form submission
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             const loginBtn = document.getElementById('loginBtn');
             loginBtn.disabled = true;
             loginBtn.textContent = 'Logging in...';
+            
+            // The form will submit normally
+        });
+
+        // Auto-fill demo accounts when buttons are clicked
+        document.addEventListener('DOMContentLoaded', function() {
+            const demoButtons = document.querySelectorAll('.demo-btn');
+            demoButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const form = this.closest('form');
+                    const loginBtn = document.getElementById('loginBtn');
+                    loginBtn.disabled = true;
+                    loginBtn.textContent = 'Logging in...';
+                });
+            });
         });
     </script>
 </body>
